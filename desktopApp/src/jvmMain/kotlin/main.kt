@@ -33,20 +33,28 @@ import java.lang.reflect.Field
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main(args: Array<String>) {
+    println("main() 1")
+
     Thread.setDefaultUncaughtExceptionHandler { _: Thread, error: Throwable ->
         error.printStackTrace()
         val dialog = ExceptionDialog(Frame(), error)
         dialog.isVisible = true
     }
+    println("main() 2")
 
     val coroutine_scope: CoroutineScope = CoroutineScope(Job())
+    println("main() 3")
     val context: AppContext = AppContext(SpMp.app_name, coroutine_scope)
+    println("main() 4")
 
     SpMp.init(context)
+    println("main() 5")
 
     val arguments: ProgramArguments = ProgramArguments.parse(args) ?: return
+    println("main() 6")
 
     SpMp.onStart()
+    println("main() 7")
 
     if (hostOs == OS.Linux) {
         try {
@@ -58,15 +66,19 @@ fun main(args: Array<String>) {
         }
         catch (_: Throwable) {}
     }
+    println("main() 8")
 
     lateinit var window: ComposeWindow
     val enable_window_transparency: Boolean = ThemeSettings.Key.ENABLE_WINDOW_TRANSPARENCY.get(context.getPrefs())
 
     val shortcut_state: ShortcutState = ShortcutState()
     var player: PlayerState? = null
+    println("main() 9")
 
     application {
+    println("main() 10")
         val text_field_focus_state: Any = getTextFieldFocusState()
+    println("main() 11")
 
         Window(
             title = SpMp.app_name,
@@ -99,7 +111,9 @@ fun main(args: Array<String>) {
             undecorated = enable_window_transparency,
             transparent = enable_window_transparency
         ) {
+    println("main() 12")
             LaunchedEffect(Unit) {
+    println("main() 13")
                 window = this@Window.window
 
                 if (enable_window_transparency) {
@@ -126,7 +140,9 @@ fun main(args: Array<String>) {
                         RuntimeException("Execution of startup command failed", e).printStackTrace()
                     }
                 }
+    println("main() 14")
             }
+    println("main() 15")
 
             SpMp.App(
                 arguments,
@@ -149,11 +165,15 @@ fun main(args: Array<String>) {
                     player = it
                 }
             )
+    println("main() 16")
         }
     }
+    println("main() 17")
 
     coroutine_scope.cancel()
+    println("main() 18")
 
     SpMp.onStop()
     SpMp.release()
+    println("main() 19")
 }
