@@ -281,16 +281,12 @@ internal fun NowPlayingMainTabPage.NowPlayingMainTabLarge(page_height: Dp, top_b
                                 }
                             )
 
-                            val max_thumbnail_row_height: Dp =
-                                if (compact_mode) (1f - absolute_expansion) * thumb_size
-                                else thumb_size
-
-                            val thumbnail_row_height: Dp = (min_height + ((max_thumbnail_row_height - min_height) * absolute_expansion)).coerceAtLeast(min_height)
+                            val thumbnail_row_height: Dp = (min_height + ((thumb_size - min_height) * absolute_expansion)).coerceAtLeast(min_height)
 
                             if (!compact_mode || absolute_expansion < 1f) {
                                 LargeThumbnailRow(
                                     Modifier
-                                        .height(thumbnail_row_height)
+                                        .height(if (compact_mode) min_height else thumbnail_row_height)
                                         .graphicsLayer {
                                             alpha = if (compact_mode) 1f - absolute_expansion else 1f
                                         }
